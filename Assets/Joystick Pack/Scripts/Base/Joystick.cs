@@ -35,7 +35,7 @@ public class Joystick : MonoBehaviour, IPointerDownHandler, IDragHandler, IPoint
     [SerializeField] private RectTransform handle = null;
     private RectTransform baseRect = null;
 
-    private Canvas canvas;
+    private UnityEngine.Canvas canvas;
     private Camera cam;
 
     private Vector2 input = Vector2.zero;
@@ -45,7 +45,7 @@ public class Joystick : MonoBehaviour, IPointerDownHandler, IDragHandler, IPoint
         HandleRange = handleRange;
         DeadZone = deadZone;
         baseRect = GetComponent<RectTransform>();
-        canvas = GetComponentInParent<Canvas>();
+        canvas = GetComponentInParent<UnityEngine.Canvas>();
         if (canvas == null)
             Debug.LogError("The Joystick is not placed inside a canvas");
 
