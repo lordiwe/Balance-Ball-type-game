@@ -13,6 +13,10 @@ public class PlayerController : MonoBehaviour
 
     public Text lifesText;
 
+    public Text timerText;
+
+    private float time;
+
     private Rigidbody rb;
 
     private int lifes;
@@ -36,8 +40,8 @@ public class PlayerController : MonoBehaviour
     {
         playerObj = GameObject.FindGameObjectWithTag("Player");
         currentCheckpoint = GameObject.FindGameObjectWithTag("Respawn");
-        
 
+        time = 0;
         
         rb = GetComponent<Rigidbody>();
 
@@ -55,6 +59,9 @@ public class PlayerController : MonoBehaviour
     }
     public void Update()
     {
+        time += Time.deltaTime;
+        TimerUpdate();
+
         if (playerObj.transform.position.y < -2 && playSoundCheck == false)
         {
             //FindObjectOfType<AudioSource>().PlayOneShot(fallSound);
@@ -113,6 +120,12 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    void TimerUpdate()
+    {
+        string minutes = ((int)time / 60).ToString();
+        string seconds = (time % 60).ToString();
+        timerText.text = minutes + ":" + seconds;
+    }
     
     void SetLifesText()
     {

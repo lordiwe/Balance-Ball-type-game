@@ -8,7 +8,10 @@ public class Teleporter : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-                other.gameObject.transform.position = teleport_exit.gameObject.transform.position;  
+
+            other.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
+            other.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.None;
+            other.gameObject.transform.position = teleport_exit.gameObject.transform.position;  
         }
     }
 }
