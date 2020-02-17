@@ -10,6 +10,6 @@ public class Rotator : MonoBehaviour
     float speed = 50f;
     void Update()
     {
-        transform.Rotate(Vector3.up * speed * Time.deltaTime);
+        transform.Rotate(Vector3.down * speed * Time.deltaTime);
     }
 }

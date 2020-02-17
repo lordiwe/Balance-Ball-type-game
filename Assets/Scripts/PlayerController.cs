@@ -19,13 +19,18 @@ public class PlayerController : MonoBehaviour
 
     private Rigidbody rb;
 
+    private Collider coll;
+
     private int lifes;
 
     private GameObject playerObj;
 
-    public GameObject currentCheckpoint;
+    private GameObject currentCheckpoint;
 
     protected Joystick joystick;
+    protected JumpButton jumpButton;
+
+    protected bool jump;
 
     public Transform cam;
 
@@ -38,6 +43,7 @@ public class PlayerController : MonoBehaviour
     // At the start of the game..
     void Start()
     {
+        Time.timeScale = 1f;
         playerObj = GameObject.FindGameObjectWithTag("Player");
         currentCheckpoint = GameObject.FindGameObjectWithTag("Respawn");
 
@@ -45,15 +51,17 @@ public class PlayerController : MonoBehaviour
         
         rb = GetComponent<Rigidbody>();
 
-        joystick = FindObjectOfType<Joystick>();
+        coll = GetComponent<Collider>();
 
-        lifes = 1;
+        joystick = FindObjectOfType<Joystick>();
+        jumpButton = FindObjectOfType<JumpButton>();
+
+        lifes = 3;
 
         SetLifesText();
         
 
         playSoundCheck = false;
-
         
 
     }
@@ -78,7 +86,7 @@ public class PlayerController : MonoBehaviour
                 SetLifesText();
                 playSoundCheck = false;
             }
-            else
+            else if (lifes <= 0)
             {
                 StopMovement();
                 playerObj.transform.position = currentCheckpoint.transform.position;
@@ -100,6 +108,16 @@ public class PlayerController : MonoBehaviour
                     0, -joystick.Vertical);
         rb.AddForce(movement * speed);
 
+        if(!jump && jumpButton.Pressed && isGrounded())
+        {
+            jump = true;
+            rb.velocity += Vector3.up * 5f;
+        } 
+
+        else if (jump  && !jumpButton.Pressed)
+        {
+            jump = false;
+        }
     }
     
     void OnTriggerEnter(Collider other)
@@ -120,6 +138,11 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    bool isGrounded()
+    {
+        return Physics.Raycast(transform.position, Vector3.down, coll.bounds.extents.y + 0.1f);
+    }
+
     void TimerUpdate()
     {
         string minutes = ((int)time / 60).ToString();
@@ -129,7 +152,7 @@ public class PlayerController : MonoBehaviour
     
     void SetLifesText()
     {
-        //lifesText.text = "Lifes: " + lifes.ToString();
+        lifesText.text = "Lifes: " + lifes.ToString();
     }
 
     void StopMovement()
@@ -137,4 +160,6 @@ public class PlayerController : MonoBehaviour
         playerObj.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
         playerObj.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.None;
     }
+
+
 }
