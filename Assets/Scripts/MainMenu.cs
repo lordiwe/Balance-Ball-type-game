@@ -5,9 +5,13 @@ using UnityEngine.SceneManagement;
 
 public class MainMenu : MonoBehaviour
 {
+    public SceneFader sceneFader;
+
+    private string lvlSelector = "Level Selection";
+
     public void PlayGame()
     {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+        sceneFader.FadeTo(lvlSelector);
     }
     public void QuitGame()
     {

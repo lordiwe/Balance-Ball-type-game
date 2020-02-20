@@ -7,6 +7,10 @@ public class GameManager : MonoBehaviour
     public GameObject pauseButton;
     public GameObject timer;
     public GameObject lifes;
+    public SceneFader sceneFader;
+    public PauseMenu pauseMenu;
+    private string mainMenuScene = "Main Menu";
+
     public void GameOver()
     {
         Time.timeScale = 0f;
@@ -18,10 +22,12 @@ public class GameManager : MonoBehaviour
     }
     public void ToMenu()
     {
-        SceneManager.LoadScene(0);
+        pauseMenu.Resume();
+        sceneFader.FadeTo(mainMenuScene);
     }
     public void Restart()
     {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        pauseMenu.Resume();
+        sceneFader.FadeTo(SceneManager.GetActiveScene().name);
     }
 }
