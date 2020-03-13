@@ -19,7 +19,8 @@ public class PlayerController : MonoBehaviour
 
     public Text popupText;
 
-    private float time;
+    [HideInInspector]
+    public float time;
 
     private Rigidbody rb;
 

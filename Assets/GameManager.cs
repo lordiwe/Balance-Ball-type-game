@@ -15,6 +15,10 @@ public class GameManager : MonoBehaviour
 
     public PauseMenu pauseMenu;
 
+    public GameObject highscoreTable;
+
+    public PlayerController controller;
+
     public string nextlvl;
 
     public int nextlvlIndex;
@@ -44,7 +48,24 @@ public class GameManager : MonoBehaviour
 
     public void Finish()
     {
+        Time.timeScale = 0f;
+        FindObjectOfType<FixedJoystick>().gameObject.SetActive(false);
+        FindObjectOfType<JumpButton>().gameObject.SetActive(false);
+        pauseButton.SetActive(false);
+        timer.gameObject.SetActive(false);
+        lifes.SetActive(false);
+
+        float time = controller.time;
+
+        highscoreTable.GetComponent<LeaderBoard>().AddHighscoreEntry(time, "max");
+        
         PlayerPrefs.SetInt("levelReached", nextlvlIndex);
+
+        highscoreTable.SetActive(true);
+    }
+    public void ToNextLvl()
+    {
+        Time.timeScale = 1f;
         sceneFader.FadeTo(nextlvl);
     }
 }

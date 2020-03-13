@@ -13,6 +13,10 @@ public class OptionsMenu : MonoBehaviour
     public void Start()
     {
         mute = bool.Parse(PlayerPrefs.GetString("mute", "false"));
+        if (mute)
+        {
+            toggle.isOn = false;
+        }
         MuteMusic();
     }
 
