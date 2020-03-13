@@ -5,12 +5,6 @@ using UnityEngine;
 
 public class MaterialChanger : MonoBehaviour
 {
-
-
-    public float timer;
-
-    private float tmpDrag;
-
     public int texture_id;
 
     public bool changed = false;
@@ -19,51 +13,59 @@ public class MaterialChanger : MonoBehaviour
 
     private void Start()
     {
-        timer = 2;
         Changer = FindObjectOfType<MaterialChanger>();
     }
 
     public void OnTriggerEnter(Collider other)
     {
-        tmpDrag = other.GetComponent<Rigidbody>().drag;
         if (other.CompareTag("Player"))
         {
+            if (other.GetComponent<Renderer>().material != other.GetComponent<PlayerController>().materials[texture_id])
+            { 
             other.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
             Vector3 position = new Vector3(Changer.gameObject.transform.position.x, 
                 other.gameObject.transform.position.y, 
                 Changer.gameObject.transform.position.z);
 
-            if (!changed)
-            {
-                other.gameObject.transform.position = position;
-                MaterialChange(other);
-
-                switch (texture_id)
+                if (!changed)
                 {
-                    case 0:
-                        {
+                    other.gameObject.transform.position = position;
+                    MaterialChange(other);
 
-                            break;
-                        }
-                    case 1:
-                        {
+                    switch (texture_id)
+                    {
+                        case 0:
+                            {
 
-                            break;
-                        }
-                    case 2:
-                        {
-
-                            break;
-                        }
+                                other.GetComponent<Rigidbody>().mass = 2;
+                                other.GetComponent<PlayerController>().speed = 10;
+                                break;
+                            }
+                        case 1:
+                            {
+                                other.GetComponent<Rigidbody>().mass = 10;
+                                other.GetComponent<PlayerController>().speed = 30;
+                                break;
+                            }
+                        case 2:
+                            {
+                                other.GetComponent<Rigidbody>().mass = 1;
+                                other.GetComponent<PlayerController>().speed = 10;
+                                break;
+                            }
+                        case 3:
+                            {
+                                other.GetComponent<Rigidbody>().mass = 1;
+                                other.GetComponent<PlayerController>().speed = 10;
+                                break;
+                            }
+                    }
+                    other.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.None;
                 }
-                other.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.None;
 
 
 
-
-
-                //CurrentTexture++;
-                //CurrentTexture %= textures.Length;
+                
                 //GetComponent<Renderer>().material = textures[CurrentTexture];
             }
         }

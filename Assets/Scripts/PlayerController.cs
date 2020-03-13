@@ -9,11 +9,15 @@ using UnityEngine.Audio;
 
 public class PlayerController : MonoBehaviour
 {
+    public GameManager manager;
+
     public float speed;
 
     public Text lifesText;
 
     public Text timerText;
+
+    public Text popupText;
 
     private float time;
 
@@ -44,7 +48,9 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         Time.timeScale = 1f;
+
         playerObj = GameObject.FindGameObjectWithTag("Player");
+
         currentCheckpoint = GameObject.FindGameObjectWithTag("Respawn");
 
         time = 0;
@@ -59,7 +65,8 @@ public class PlayerController : MonoBehaviour
         lifes = 3;
 
         SetLifesText();
-        
+
+        popupText.enabled = false;
 
         playSoundCheck = false;
         
@@ -108,7 +115,7 @@ public class PlayerController : MonoBehaviour
                     0, -joystick.Vertical);
         rb.AddForce(movement * speed);
 
-        if(!jump && jumpButton.Pressed && isGrounded())
+        if(!jump && jumpButton.Pressed && IsGrounded())
         {
             jump = true;
             rb.velocity += Vector3.up * 5f;
@@ -124,6 +131,8 @@ public class PlayerController : MonoBehaviour
     {
         if(other.CompareTag("CheckPoint"))
         {
+            StartCoroutine(ShowMessage("Checkpoint Reached", 2));
+
             currentCheckpoint = other.gameObject;
 
             Debug.LogWarning("Checkpoint reached!");
@@ -133,12 +142,11 @@ public class PlayerController : MonoBehaviour
 
         if(other.CompareTag("Finish"))
         {
-            Debug.LogWarning("Finish reached!");
-
+            manager.Finish();
         }
     }
 
-    bool isGrounded()
+    bool IsGrounded()
     {
         return Physics.Raycast(transform.position, Vector3.down, coll.bounds.extents.y + 0.1f);
     }
@@ -161,5 +169,11 @@ public class PlayerController : MonoBehaviour
         playerObj.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.None;
     }
 
-
+    IEnumerator ShowMessage(string message, float delay)
+    {
+        popupText.text = message;
+        popupText.enabled = true;
+        yield return new WaitForSeconds(delay);
+        popupText.enabled = false;
+    }
 }
