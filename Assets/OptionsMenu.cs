@@ -12,11 +12,11 @@ public class OptionsMenu : MonoBehaviour
 
     public void Start()
     {
+        //mute = JsonUtility.FromJson<bool>(jsonString);
+        //mute = (PlayerPrefs.GetInt("mute") != 0 );
         mute = bool.Parse(PlayerPrefs.GetString("mute", "false"));
-        if (mute)
-        {
-            toggle.isOn = false;
-        }
+        Debug.LogWarning(mute);
+        ChangeToggle();
         MuteMusic();
     }
 
@@ -40,6 +40,18 @@ public class OptionsMenu : MonoBehaviour
         }
     }
 
+    public void ChangeToggle()
+    {
+        if(mute)
+        {
+            toggle.isOn = false;
+        }
+        if (!mute)
+        {
+            toggle.isOn = true;
+        }
+    }
+
     public void ChangeSettings()
     {
         if (!toggle.isOn)
@@ -52,10 +64,8 @@ public class OptionsMenu : MonoBehaviour
             PlayerPrefs.SetString("mute", "true");
             mute = true;
         }
-    }
-
-    public void SetQuality(int qualityIndex)
-    {
-        QualitySettings.SetQualityLevel(qualityIndex);
+        //PlayerPrefs.SetString("mute", mute.ToString());
+        //PlayerPrefs.SetInt("mute", (mute ? 1 : 0));
+        PlayerPrefs.Save();
     }
 }

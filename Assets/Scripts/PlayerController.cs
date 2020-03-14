@@ -70,8 +70,6 @@ public class PlayerController : MonoBehaviour
         popupText.enabled = false;
 
         playSoundCheck = false;
-        
-
     }
     public void Update()
     {
